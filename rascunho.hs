@@ -64,3 +64,34 @@ hailstoneLen n = intListLength (hailstoneSeq n) - 1
 hailstoneSeqLen :: Integer -> [Integer]
 hailstoneSeqLen 0 = []
 hailstoneSeqLen n = hailstoneLen(n) : hailstoneSeqLen(n - 1)
+
+
+-- tipo de dados Algébrico 
+-- Basicamente um tipo de dado personalizado 
+--
+-- data AlgDataType = Const1 Type11 Type12
+--                  | Const2 Type21 
+--                  | Const3 Type31 Type32 Type 33
+--
+--Nota: TIPOS e CONSTRUTORES precisam começar com letra MAIUSCULA 
+--Enquanto variaveis E nome de funções com letra MINUSCULA
+--]
+-- árvore 
+data Tree = Leaf Char
+    | Node Tree Int Tree
+ deriving Show
+
+tree :: Tree
+tree = Node (Leaf 'x') 1 (Node (Leaf 'y') 2 (Leaf 'z'))
+
+
+
+
+
+
+
+
+
+
+
+
