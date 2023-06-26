@@ -13,9 +13,10 @@ type Move = (Peg, Peg)
 --    B, C | B, A | C, A | B, C | A, B | A, C | B, C
 --
 --    Qual o padrão?
---    Faz o caminho anterior com B e C trocados, i.e., mover as n-1 primeiras peças para B 
---    depois A, C, i.e., mover a peça maior para C
---    Por fim o caminho anterior com A e B trocados, i.e., mover as n-1 primeiras peças para C
+--    Faz o caminho anterior com B e C trocados, i.e., mover as n-1 primeiras 
+--    peças para B depois A, C, i.e., mover a peça maior para C
+--    Por fim o caminho anterior com A e B trocados, i.e., mover as n-1 
+--    primeiras peças para C
 
 
 hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]

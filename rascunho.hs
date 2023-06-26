@@ -77,12 +77,19 @@ hailstoneSeqLen n = hailstoneLen(n) : hailstoneSeqLen(n - 1)
 --Enquanto variaveis E nome de funções com letra MINUSCULA
 --]
 -- árvore 
-data Tree = Leaf Char
-    | Node Tree Int Tree
- deriving Show
+--data Tree = Leaf Char
+ --   | Node Tree Int Tree
+ --deriving Show
 
-tree :: Tree
-tree = Node (Leaf 'x') 1 (Node (Leaf 'y') 2 (Leaf 'z'))
+
+
+
+
+
+
+
+
+
 
 
 
