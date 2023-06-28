@@ -7,7 +7,8 @@ quicksort (x:xs) = quicksort menorEq ++ [x] ++ quicksort maior
 quicksortList :: [[a]] -> [[a]]
 quicksortList [] = []
 quicksortList (x:xs) = quicksortList menorEq ++ [x] ++ quicksortList maior
-    where menorEq = [a | a <- xs, length a <= length x]
-          maior = [a | a <- xs, length a > length x]
+    where 
+        menorEq = [a | a <- xs, length a <= length x]
+        maior = [a | a <- xs, length a > length x]
 
 
