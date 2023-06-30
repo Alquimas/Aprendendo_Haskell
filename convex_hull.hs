@@ -1,4 +1,3 @@
-import Data.ByteString (cons)
 data Direction = Left' | Right' | Straight'
  deriving (Show, Eq)
 
@@ -46,5 +45,28 @@ sortByAngle a (x:xs) = smaller ++ [x] ++ greater
         greater = sortByAngle a [b | b <- xs, (angle a b) > (angle a x)]
 
 
-grahamScan :: [Coordinate] -> [Coordinate]
-grahamScan _ = []
+grahamScan :: [Coordinate] -> [Coordinate] -> [Coordinate]
+grahamScan x y
+    | null y = grahamScan xs (cx:bx:ax:[])
+    | direction (cy, by, ay) == Right' = grahamScan x (ay:cy:ys)
+    | null x = y 
+    | otherwise = grahamScan (tail x) (ax:y)
+    where
+        ay = head y
+        by = head (tail y)
+        cy = head (tail (tail y))
+        ys = tail (tail (tail y))
+        ax = head x
+        bx = head (tail x)
+        cx = head (tail (tail x))
+        xs = tail (tail (tail x))
+
+allAtOnce :: [Coordinate] -> [Coordinate]
+allAtOnce x
+    | length x <= 3 = x
+    | otherwise = grahamScan (y:points) []
+    where 
+        points = sortByAngle y ys
+        y = head (sortCoord x)
+        ys = tail (sortCoord x)
+
