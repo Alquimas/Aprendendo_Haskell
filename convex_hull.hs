@@ -52,14 +52,8 @@ grahamScan x y
     | null x = y 
     | otherwise = grahamScan (tail x) (ax:y)
     where
-        ay = head y
-        by = head (tail y)
-        cy = head (tail (tail y))
-        ys = tail (tail (tail y))
-        ax = head x
-        bx = head (tail x)
-        cx = head (tail (tail x))
-        xs = tail (tail (tail x))
+        (ax : bx : cx : xs) = x
+        (ay : by : cy : ys) = y
 
 allAtOnce :: [Coordinate] -> [Coordinate]
 allAtOnce x
