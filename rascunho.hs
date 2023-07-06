@@ -5,7 +5,7 @@ x = 3
 -- x = 4
 -- retirar o comentário da linha acima vai causar um erro
 --
-
+--
 --Tipos
 --
 -- Int : Inteiros limitados
@@ -78,27 +78,56 @@ hailstoneSeqLen n = hailstoneLen(n) : hailstoneSeqLen(n - 1)
 --]
 -- árvore 
 --data Tree = Leaf Char
- --   | Node Tree Int Tree
- --deriving Show
+--   | Node Tree Int Tree
+--deriving Show
+--
+--
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = []
+map' f (x:xs) = f x : map' f xs
 
 
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs) 
+    | p x = x : filter' p xs
+    | otherwise = filter' p xs
+
+--lambdas 
+main = print $ filter' (\xs -> length xs > 15) (map hailstoneSeqLen [1..100])
+
+foldl' :: (a  -> b -> a) -> a -> [b] -> a
+foldl' step acc (x:xs) = foldl' step (step acc x) xs
+foldl' _ acc [] = acc 
+
+foldr' :: (a -> b -> b) -> b -> [a] -> b
+foldr' step acc (x:xs) = step x (foldr' step acc xs)
+foldr' _ acc [] = acc
+
+--existem também foldl1 e foldr1, que tratam o inicio/fim da lista como 
+--acumuladores. Devido a isso, elas quebram numa lista vazia
+
+myFoldl' :: (a -> b -> a) -> a -> [b] -> a
+myFoldl' f z xs = (foldr' step id xs) z
+    where 
+        step x g a = g (f a x)
 
 
+--type variables podem ser também funções, e é ai que vem a sacada
+--foldr' step id xs recebe uma lista de tipo [b] e uma função do tipo
+--a -> a e portanto deve retornar uma função do tipo a -> a 
+--em cada passo do folding, só damos x e g a step, de modo que ele continua
+--necessitando do termo a para ser executado  
 
+--podemos declarar uma classe do seguinte modo 
+--class NOME VARIAVEIS where 
+--  <funcoes que toda instancia de NOME precisa implementar>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- para que um tipo criado seja derivado de uma classe, i.e., sendo uma
+-- instancia dessa classe 
+-- podemos usar <INDENT>deriving (Class1,Class2,...), desde que a classe
+-- seja escrita em termos de outras que já pertençam as classes
+-- ou podemos 
+--instance Class type where 
+--    <defina aqui todas as funcoes basicas que a classe precisa>
+--    <para todos os seus construtores>
