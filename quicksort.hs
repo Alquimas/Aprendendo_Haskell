@@ -11,5 +11,3 @@ quicksortList (x:xs) = quicksortList menorEq ++ [x] ++ quicksortList maior
     where 
         menorEq = [a | a <- xs, length a <= length x]
         maior = [a | a <- xs, length a > length x]
-
-
