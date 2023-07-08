@@ -86,4 +86,52 @@ myAny f x = myOr $ map' f x
 myAll :: (a -> Bool) -> [a] -> Bool
 myAll f x = myAnd $ map' f x 
 
+-- definição da função concat
+myConcat :: [[a]] -> [a]
+myConcat [] = []
+myConcat (x:xs) = x ++ myConcat xs
+
+-- definição da função scanl 
+myScanl :: (b -> a -> b) -> b -> [a] -> [b]
+myScanl _ acc [] = [acc]
+myScanl step acc (x:xs) = acc : myScanl step (step acc x) xs
+
+-- definição da função scanr
+myScanr :: (a -> b -> b) -> b -> [a] -> [b]
+myScanr _ acc [] = [acc]
+myScanr step acc (x:xs) = step x q : qs
+    where 
+        qs@(q:_) = myScanr step acc xs
+
+-- definição da função iterate
+myIterate :: (a -> a) -> a -> [a]
+myIterate f x = x : myIterate f (f x)
+
+-- definição da função repeat 
+myRepeat :: a -> [a]
+myRepeat x = x : myRepeat x
+
+-- definição da função take 
+myTake :: Int -> [a] -> [a]
+myTake n l
+    | myNull l = []
+    | n < 1 = []
+    | otherwise = x : myTake (n - 1) xs
+    where 
+        (x:xs) = l
+
+-- definição da função replicate 
+myReplicate :: Int -> a -> [a]
+myReplicate n x 
+    | n < 1 = []
+    | otherwise = myTake n $ myRepeat x
+
+-- definição da função cycle 
+myCycle :: [a] -> [a]
+myCycle [] = error "Lista Vazia"
+myCycle x = xs
+    where
+        xs = x ++ xs 
+
+
 
