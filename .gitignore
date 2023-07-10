@@ -24,3 +24,6 @@ cabal.project.local~
 
 # saida dos meus arquivos, supondo que eu consiga fazer eles sairem onde eu quero
 /out/
+
+# fractais
+*.ppm
