@@ -43,7 +43,7 @@ convergence :: Double -> Color
 convergence n = (rgb n, rgb (3*n), rgb (5*n))
 
 rgb :: Double -> Int
-rgb n = mod (floor $ ((sin n) * 255)^2) 256
+rgb n = mod (floor $ n^2) 256
 
 -- The heart of the code
 -- ListOfPoints -> NumberOfIterations -> ListOfColors
@@ -61,8 +61,8 @@ intListToByteString = L8.pack . map (toEnum . fromIntegral)
 
 -- Create the name of the file
 --------------------------------------------------------------------------------
-name :: Double -> Double -> String
-name x y = (show $ floor x) ++ "_fractal" ++ (show $ floor y) ++ ".ppm"
+name :: Double -> Double -> Double -> Double -> String
+name x y xC yC = (show $ floor x) ++ "_" ++ (show xC) ++ "_" ++ (show yC) ++ "_" ++ (show $ floor y) ++ ".ppm"
 
 --Main
 --------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ main = do
         xC = read input3 :: Double
         yC = read input4 :: Double
         rad = read input5 :: Double
-    outh <- openFile (name res ite) WriteMode
+    outh <- openFile (name res ite xC yC) WriteMode
     hPutStrLn outh ("P6\n" ++ (show $ floor res) ++ " " ++ (show $ floor res) ++ "\n255")
     L.hPut outh (intListToByteString (fractal (complexSection (res-1) (rad) (xC) (yC)) ite)) 
     hClose outh 
