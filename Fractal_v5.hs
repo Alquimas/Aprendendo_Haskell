@@ -5,16 +5,16 @@ import System.IO
 type ComplexNumber = (Double, Double)
 type Color = (Int, Int, Int)
 
--- Functions than create the points in the [-2,1] X [-1.5,1.5]
+-- Functions than create the points
 --------------------------------------------------------------------------------
-xAxis :: Double -> [Double]
-xAxis x = [-2.0, -2.0 + 3.0 / x..1.0]
+xAxis :: Double -> Double -> Double -> [Double]
+xAxis res x rad = [(x - rad), (x - rad) + (2 * rad) / res..(x + rad)]
 
-yAxis :: Double -> [Double]
-yAxis y = [1.5, 1.5 - 3.0 / y..(-1.5)]
+yAxis :: Double -> Double -> Double -> [Double]
+yAxis res y rad = [(y + rad), (y + rad) - (2 * rad) / res..(y - rad)]
 
-complexSection :: Double -> Double -> [ComplexNumber]
-complexSection a b = [(x, y) | y <- yAxis b, x <- xAxis a]
+complexSection :: Double -> Double -> Double -> Double -> [ComplexNumber]
+complexSection res rad xC yC = [(x, y) | y <- yAxis res yC rad, x <- xAxis res xC rad]
 
 --------------------------------------------------------------------------------
 -- Iterator
@@ -23,7 +23,7 @@ iterator :: ComplexNumber -> Double -> ComplexNumber -> Color
 iterator _ 0 _ = (0, 0, 0)
 iterator (x, y) n (z, w)
     | cardioidAndBulb (z, w) = (0,0,0)
-    | x^2 + y^2 <= 4 = iterator (x*x - y*y + z,2*x*y + w) (n-1) (z, w)
+    | x^2 + y^2 <= 4 = iterator (x*x - y*y + z,2*x*y + w) (n - 1) (z, w)
     | otherwise = convergence n
 
 -- If the starting point is in the main cardioid or the 2-bulb, it converges
@@ -46,19 +46,24 @@ rgb :: Double -> Int
 rgb n = mod (floor $ ((sin n) * 255)^2) 256
 
 -- The heart of the code
--- ListOfPoints -> NumberOfIterations -> SetOfColors
+-- ListOfPoints -> NumberOfIterations -> ListOfColors
 --------------------------------------------------------------------------------
 fractal :: [ComplexNumber] -> Double -> [Int]
 fractal [] _ = []
-fractal (l:ls) a = x : y : z : (fractal ls a)
+fractal (l:ls) ite = x : y : z : (fractal ls ite)
     where
-        (x, y, z) = iterator (0,0) a l
+        (x, y, z) = iterator (0,0) ite l
 
+-- Convert a list of ints into a ByteString
+--------------------------------------------------------------------------------
 intListToByteString :: [Int] -> L.ByteString
 intListToByteString = L8.pack . map (toEnum . fromIntegral)
 
+-- Create the name of the file
+--------------------------------------------------------------------------------
 name :: Double -> Double -> String
-name x y = (show $ floor x) ++ "_mandelbrotset" ++ (show $ floor y) ++ ".ppm"
+name x y = (show $ floor x) ++ "_fractal" ++ (show $ floor y) ++ ".ppm"
+
 --Main
 --------------------------------------------------------------------------------
 main = do
@@ -66,10 +71,19 @@ main = do
     input1 <- getLine
     putStrLn "Enter the number of iterations:"
     input2 <- getLine
+    putStrLn "Enter the x coordinate of the center:"
+    input3 <- getLine
+    putStrLn "Enter the y coordinate of the center:"
+    input4 <- getLine
+    putStrLn "Enter the radius of the image:"
+    input5 <- getLine
     let
-        num1 = read input1 :: Double
-        num2 = read input2 :: Double
-    outh <- openFile (name num1 num2) WriteMode
-    hPutStrLn outh ("P6\n" ++ (show $ floor num1) ++ " " ++ (show $ floor num1) ++ "\n255")
-    L.hPut outh (intListToByteString (fractal (complexSection (num1-1) (num1-1)) num2)) 
+        res = read input1 :: Double
+        ite = read input2 :: Double
+        xC = read input3 :: Double
+        yC = read input4 :: Double
+        rad = read input5 :: Double
+    outh <- openFile (name res ite) WriteMode
+    hPutStrLn outh ("P6\n" ++ (show $ floor res) ++ " " ++ (show $ floor res) ++ "\n255")
+    L.hPut outh (intListToByteString (fractal (complexSection (res-1) (rad) (xC) (yC)) ite)) 
     hClose outh 
