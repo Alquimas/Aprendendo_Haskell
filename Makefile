@@ -15,7 +15,7 @@ run: compile
 	./$(OUTPUT_FILE)
 
 clean:
-	mv -f $(OUTPUT_FILE) $(OUTPUT_FILE).o $(OUTPUT_FILE).hi out/
+	mv -f $(OUTPUT_FILE) $(OUTPUT_FILE).o $(OUTPUT_FILE).hi out/ > /dev/null 2>&1
 
 
 
